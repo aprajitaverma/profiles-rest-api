@@ -4,12 +4,15 @@ from rest_framework import viewsets
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
 
 from . import serializers
 from . import models
+from . import permissions
 from rest_framework import status
 
 # Create your views here.
+
 
 class HelloAPIView(APIView):
     """Test API View."""
@@ -20,10 +23,10 @@ class HelloAPIView(APIView):
         """Returns a list of APIView features."""
 
         an_apiview = [
-        'Uses HTTPmethods as function (get, post, patch, pur, delete)',
-        'It is similar to traditional django view',
-        'Gives you the most control over your logic',
-        'Is mapped manually to URLs',
+            'Uses HTTPmethods as function (get, post, patch, pur, delete)',
+            'It is similar to traditional django view',
+            'Gives you the most control over your logic',
+            'Is mapped manually to URLs',
         ]
 
         return Response({'message' : 'Hey there!', 'an_apiview' : an_apiview})
@@ -111,3 +114,5 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdateOwnProfile,)
